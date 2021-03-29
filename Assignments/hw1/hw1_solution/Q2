@@ -1,0 +1,20 @@
+MBR -> IR       0x0100e308
+IR -> MAR       0x0000e308
+M -> MBR        0x00000014
+MBR -> AC       0x0100e308
+
+PC -> PC + 1    0x00001018
+PC -> MAR       0x0000101c
+M -> MBR        0x0300e30c
+MBR -> IR       0x0300e30c
+IR -> MAR       0x0000e30c
+M -> MBR        0x00000088
+AC + MBR -> AC  0x0000009c
+
+PC -> PC + 1    0x0000101c
+PC -> MAR       0x00001020
+M -> MBR        0x0200e310
+MBR -> IR       0x0200e310
+IR -> MAR       0x0000e310
+AC -> MBR       0x0000009c
+MBR -> M        0x0000009c

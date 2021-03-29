@@ -1,0 +1,28 @@
+cust: semaphore (:= 0);
+bus: semaphore (:= 0);
+busReady: semaphore (:= 0);
+busMutex: semaphore (:= 1);
+
+procedure visitor;
+{   signal (cust);
+    wait (bus);
+    visitor gets in bus;
+    wait (busReady);
+    drive around the park;
+    visitor gets off bus;
+}
+
+procedure bus;
+{
+    wait(busMutex);
+    signal(bus);
+    signal(bus);
+    wait(cust);
+    wait(cust);
+    signal(busReady);
+    signal(busReady);
+    signal(busMutex);
+    drive around the park;
+    unload visitors;
+}
+

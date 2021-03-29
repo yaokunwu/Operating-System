@@ -1,0 +1,60 @@
+#!/bin/bash
+
+func() {
+    constant=1024
+    echo "Visiting $1"
+    printf "Smaller files under $1: " >> $2
+    # nFiles=$((`ls $1 | wc -l`))
+    nF=0
+
+    # calculate how many files in the current directory are less than 1KB
+    for filename in $1/*;
+    do
+        if [ -d "$filename" ]; then
+            myfilesize=$(du -shk "$filename" | cut -f1)
+            myfilesize=`expr $myfilesize \* 1024`
+        elif [ -f "$filename" ]; then 
+                
+            myfilesize=$(wc -c "$filename" | awk '{print $1}') 
+        else
+            continue
+        fi
+
+        if [ "$myfilesize" -lt $constant ]; then
+            nF=`expr $nF + 1`
+        fi
+    done
+
+
+    # if any files or directory is less than 1KB, print to output file 
+   for filename in $1/*;
+   do
+       if [ -d "$filename" ]; then
+           myfilesize=$(du -shk "$filename" | cut -f1)
+           myfilesize=`expr $myfilesize \* 1024`
+       elif [ -f "$filename" ]; then 
+           myfilesize=$(wc -c "$filename" | awk '{print $1}') 
+       else
+           continue
+       fi
+
+       if [ "$myfilesize" -lt $constant ]; then
+           b=$(basename $filename)
+           if [ $nF -gt 1 ]; then
+               printf "$b, " >> $2
+           else
+               printf "$b" >> $2
+           fi
+           nF=`expr $nF - 1`
+       fi
+   done
+   echo "" >> $2
+   for filename in $1/*; 
+   do   
+       if [ -d "$filename" ]; then
+           func $filename $2
+       fi
+   done
+}
+
+func $1 $2

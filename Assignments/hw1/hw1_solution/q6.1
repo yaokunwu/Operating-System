@@ -1,0 +1,13 @@
+Assume turn is initialized to 1.
+
+A possible sequence that violate  mutual exclusion is given below:
+
+P0: blocked[0]:=true;
+P0: while (turn != 0) -> true
+P0: while (blocked[1]) -> false
+P1: blocked[1]:=true;
+P1: while (turn != 1) -> false
+P1: <critical section>  //P(1) goes into CS
+P0: turn:=0;
+P0: while (turn != 0) -> false
+P0: <critical section>  //P(0) goes into CS
